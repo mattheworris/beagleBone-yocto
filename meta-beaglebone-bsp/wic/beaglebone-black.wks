@@ -1,0 +1,25 @@
+# beaglebone-black.wks — WIC Kickstart: SD card partition layout
+#
+# CONCEPT: WIC (Wic Image Creator) assembles a complete disk image with a
+# partition table and filesystem contents ready to flash to an SD card.
+#
+# IMPORTANT: Each 'part' command must be on a single line — WIC's kickstart
+# parser does not support backslash line continuations.
+#
+# AM335x BOOT REQUIREMENT: The ROM code scans the first FAT partition for MLO.
+#
+# SD CARD LAYOUT:
+#   +------------------+
+#   | MBR + partition  |  (first 512 bytes)
+#   +------------------+
+#   | Partition 1: FAT |  4MB — holds MLO + u-boot.img
+#   +------------------+
+#   | Partition 2: ext4|  remainder — holds Linux rootfs
+#   +------------------+
+
+# Boot partition: FAT, 4MB, bootable
+# --source bootimg-partition copies IMAGE_BOOT_FILES (MLO + u-boot.img) here
+part /boot --source bootimg-partition --ondisk mmcblk --fstype=vfat --label boot --active --align 4 --fixed-size 4
+
+# Root filesystem: ext4, fills remaining card space
+part / --source rootfs --ondisk mmcblk --fstype=ext4 --label root --align 4

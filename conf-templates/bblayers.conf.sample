@@ -1,0 +1,31 @@
+# bblayers.conf.sample — Copy this to your build/conf/bblayers.conf
+# and adjust the absolute paths to match your workspace layout.
+#
+# bblayers.conf tells BitBake which layers to include in the build.
+# BBLAYERS is an ordered list of absolute paths to layer root directories
+# (the directory containing conf/layer.conf).
+#
+# Layer order matters for BBFILE_PRIORITY tie-breaking, but explicit
+# priority values in layer.conf are the primary mechanism.
+
+# BBPATH and BBFILES are set automatically by BitBake using the layer
+# information — you don't set them here.
+
+BBLAYERS ?= " \
+  /path/to/workspace/poky/meta \
+  /path/to/workspace/poky/meta-poky \
+  /path/to/workspace/poky/meta-yocto-bsp \
+  /path/to/workspace/meta-beaglebone-bsp \
+  "
+
+# NOTES:
+#
+# poky/meta          = OE-Core: the base recipes (busybox, glibc, kernel, etc.)
+# poky/meta-poky     = Poky distro layer: sets poky distro defaults
+# poky/meta-yocto-bsp = Yocto reference BSPs (qemu targets, etc.)
+# meta-beaglebone-bsp = Our custom BSP layer for the BeagleBone Black
+#
+# When using the new bitbake-setup init workflow (Whinlatter 5.3+), the
+# paths to the poky layers will be inside the setup directory created by
+# bitbake-setup. Check the auto-generated bblayers.conf for the correct
+# paths, then add meta-beaglebone-bsp to the end of BBLAYERS.

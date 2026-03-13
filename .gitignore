@@ -1,3 +1,20 @@
+# Yocto build outputs — generated, never committed
+build/
+downloads/
+sstate-cache/
+
+# bitbake is cloned separately by each developer (see README)
+bitbake/
+
+# bitbake-setup init top directory (build environments live here)
+bitbake-builds/
+
+# Editor and OS noise
+.vscode/
+*.swp
+*~
+.DS_Store
+
 # Prerequisites
 *.d
 

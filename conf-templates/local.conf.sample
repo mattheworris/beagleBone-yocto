@@ -1,0 +1,87 @@
+# local.conf.sample — Copy this to your build/conf/local.conf and customize.
+#
+# local.conf is the per-developer configuration file. It is NOT committed to
+# version control (it's in .gitignore). Each developer maintains their own.
+#
+# This file is read by BitBake on every build and can override any variable
+# set in machine.conf, distro.conf, or recipes.
+
+# =============================================================================
+# MACHINE SELECTION
+# =============================================================================
+#
+# MACHINE tells BitBake which machine configuration to use. This must match
+# the filename (without .conf) of a machine config file found in any layer's
+# conf/machine/ directory. Setting this to "beaglebone-black" causes BitBake
+# to load meta-beaglebone-bsp/conf/machine/beaglebone-black.conf.
+MACHINE = "beaglebone-black"
+
+# =============================================================================
+# DISTRIBUTION POLICY
+# =============================================================================
+#
+# DISTRO selects the distribution configuration layer. "poky" is the Yocto
+# Project's reference distro — a minimal, general-purpose embedded Linux.
+# For a real product you'd create your own distro layer (meta-myproduct-distro)
+# that sets your preferred init system, C library, package format, etc.
+DISTRO = "poky"
+
+# =============================================================================
+# PACKAGE FORMAT
+# =============================================================================
+#
+# PACKAGE_CLASSES controls the packaging format used internally by Yocto.
+# "package_rpm" is the default for poky. For embedded targets where you're
+# building a complete image (not using a package manager on-device), this
+# mainly affects how the package feeds are organized. Options: rpm, deb, ipk.
+PACKAGE_CLASSES ?= "package_rpm"
+
+# =============================================================================
+# BUILD PERFORMANCE
+# =============================================================================
+#
+# BB_NUMBER_THREADS: How many BitBake tasks run concurrently. Rule of thumb:
+# set to the number of CPU cores on your build host.
+BB_NUMBER_THREADS ?= "${@oe.utils.cpu_count()}"
+
+# PARALLEL_MAKE: -j flag passed to make for each recipe's compile step.
+# Also typically set to core count. These two settings together maximize
+# build parallelism.
+PARALLEL_MAKE ?= "-j ${@oe.utils.cpu_count()}"
+
+# =============================================================================
+# DOWNLOAD AND CACHE DIRECTORIES
+# =============================================================================
+#
+# DL_DIR: Where BitBake downloads source tarballs and git repos.
+# Sharing this across multiple Yocto builds (e.g. on a team server) avoids
+# re-downloading the same sources. Default: ${TOPDIR}/downloads
+# Uncomment and adjust to share across builds:
+#DL_DIR ?= "/opt/yocto/downloads"
+
+# SSTATE_DIR: The "shared state cache" — Yocto's build cache.
+# BitBake hashes every task's inputs. If the hash matches a cached result
+# in SSTATE_DIR, it skips the task and uses the cached output instead.
+# This makes incremental and from-scratch builds dramatically faster.
+# Sharing this across developers on a team is a major build time saver.
+# Default: ${TOPDIR}/sstate-cache
+# Uncomment and adjust to share across builds:
+#SSTATE_DIR ?= "/opt/yocto/sstate-cache"
+
+# =============================================================================
+# DISK SPACE MANAGEMENT
+# =============================================================================
+#
+# Yocto builds can consume 50-100GB. These settings help manage disk usage:
+INHERIT += "rm_work"  # Delete recipe work directories after packaging
+# Note: rm_work speeds builds but makes debugging recipe failures harder.
+# Comment it out if you need to inspect build artifacts.
+
+# =============================================================================
+# SDK / TOOLCHAIN (optional, for cross-compilation outside Yocto)
+# =============================================================================
+#
+# SDKMACHINE: Host architecture for the generated SDK. Set to x86_64 if
+# you want to generate a relocatable cross-compilation toolchain tarball
+# that developers can install without running the full Yocto build.
+SDKMACHINE ?= "x86_64"
