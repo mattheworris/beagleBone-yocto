@@ -12,6 +12,11 @@
 
 ## Phase 2: Post-Launch
 
+- Switch kernel from 6.16 (non-LTS, EOL) to 6.12 LTS (check current EOL at kernel.org/category/releases.html)
+  - Set PREFERRED_VERSION_linux-yocto = "6.12%" in local.conf
+  - Verify omap2plus_defconfig and beaglebone-black.cfg still apply cleanly
+  - Confirm BBB boots with 6.12 kernel
+
 - Configure USB gadget serial so the BBB USB cable provides a /dev/ttyACM0 login console on the host (like Debian), without requiring a physical UART adapter
   - Enable CONFIG_USB_GADGET + CONFIG_USB_G_SERIAL in the kernel config
   - Add a getty on the gadget serial port via a systemd/SysV service
