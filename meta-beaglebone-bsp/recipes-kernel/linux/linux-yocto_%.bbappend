@@ -27,7 +27,18 @@ KBUILD_DEFCONFIG = "omap2plus_defconfig"
 # KCONFIG_MODE: Tell linux-yocto to use KBUILD_DEFCONFIG as the base config.
 # "defconfig" mode runs 'make <KBUILD_DEFCONFIG>' to generate the initial
 # .config, then applies any additional config fragments from SRC_URI on top.
-KCONFIG_MODE = "defconfig"
+# KCONFIG_MODE controls the base config used when merging fragments.
+#
+# "defconfig" triggers merge_config.sh -n (allnoconfig base): everything is
+# disabled by default. Options like CONFIG_PRINTK, CONFIG_TTY, CONFIG_MMU,
+# CONFIG_ARCH_MULTI_V7 that omap2plus_defconfig assumes are always on must
+# all be added explicitly — a maintenance burden that grows indefinitely.
+#
+# "alldefconfig" uses alldefconfig as base: Kconfig defaults are applied
+# first (PRINTK=y, TTY=y, MMU=y, etc.), then omap2plus_defconfig overrides
+# OMAP-specific options, then our .cfg fragment overrides BBB-specific ones.
+# This is the correct mode when using an upstream defconfig as a fragment.
+KCONFIG_MODE = "alldefconfig"
 
 # LINUX_VERSION_EXTENSION: Appends to the kernel version string in 'uname -r'.
 # Useful for identifying your custom kernel vs a distro kernel.

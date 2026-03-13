@@ -12,6 +12,9 @@
 
 ## Phase 2: Post-Launch
 
+- Configure USB gadget serial so the BBB USB cable provides a /dev/ttyACM0 login console on the host (like Debian), without requiring a physical UART adapter
+  - Enable CONFIG_USB_GADGET + CONFIG_USB_G_SERIAL in the kernel config
+  - Add a getty on the gadget serial port via a systemd/SysV service
 - Develop a custom kernel module / device driver for an existing BeagleBone Black peripheral (e.g. GPIO, I2C, or SPI)
 - Integrate the driver as a Yocto recipe within the BSP layer
 - Test and demonstrate the driver on the running image
