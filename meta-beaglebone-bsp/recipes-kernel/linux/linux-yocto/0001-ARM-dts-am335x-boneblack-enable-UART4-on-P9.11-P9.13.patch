@@ -1,0 +1,41 @@
+From fec23bd2674337621ef14f696b3e24a8c8e8390e Mon Sep 17 00:00:00 2001
+From: Matthew Orris <1466844+mattheworris@users.noreply.github.com>
+Date: Tue, 17 Nov 2026 03:05:18 +0000
+Subject: [PATCH] ARM: dts: am335x-boneblack: enable UART4 on P9.11/P9.13
+
+---
+ .../arm/boot/dts/ti/omap/am335x-boneblack.dts | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm/boot/dts/ti/omap/am335x-boneblack.dts b/arch/arm/boot/dts/ti/omap/am335x-boneblack.dts
+index b4fdcf9c02b5..48bda232d8d8 100644
+--- a/arch/arm/boot/dts/ti/omap/am335x-boneblack.dts
++++ b/arch/arm/boot/dts/ti/omap/am335x-boneblack.dts
+@@ -173,3 +173,27 @@ &gpio3 {
+ &baseboard_eeprom {
+ 	vcc-supply = <&ldo4_reg>;
+ };
++/*
++ * Append to arch/arm/boot/dts/ti/omap/am335x-boneblack.dts inside
++ * `devtool modify linux-yocto`, then `devtool finish linux-yocto
++ * <path>/meta-beaglebone-bsp` turns it into a patch in the BSP layer
++ * (pin-mux and peripheral enables are board support, not application).
++ *
++ * Enables UART4 on the P9 header:  P9.11 = RX (gpmc_wait0, mode 6)
++ *                                  P9.13 = TX (gpmc_wpn,   mode 6)
++ * The device appears as /dev/ttyS4 (alias serial4 in am33xx.dtsi).
++ */
++&am33xx_pinmux {
++	uart4_pins: uart4-pins {
++		pinctrl-single,pins = <
++			AM33XX_PADCONF(AM335X_PIN_GPMC_WAIT0, PIN_INPUT_PULLUP, MUX_MODE6)    /* P9.11 uart4_rxd */
++			AM33XX_PADCONF(AM335X_PIN_GPMC_WPN, PIN_OUTPUT_PULLDOWN, MUX_MODE6)   /* P9.13 uart4_txd */
++		>;
++	};
++};
++
++&uart4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart4_pins>;
++	status = "okay";
++};

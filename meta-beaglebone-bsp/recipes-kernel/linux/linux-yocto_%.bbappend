@@ -52,3 +52,5 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 # SRC_URI: Add our config fragment on top of omap2plus_defconfig.
 # linux-yocto applies all .cfg fragments after the base defconfig is generated.
 SRC_URI:append:beaglebone-black = " file://beaglebone-black.cfg"
+SRC_URI += "file://0001-ARM-dts-am335x-boneblack-enable-UART4-on-P9.11-P9.13.patch"
+
