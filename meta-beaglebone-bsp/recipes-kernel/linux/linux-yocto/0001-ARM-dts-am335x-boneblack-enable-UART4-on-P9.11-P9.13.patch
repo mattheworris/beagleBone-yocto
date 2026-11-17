@@ -3,6 +3,7 @@ From: Matthew Orris <1466844+mattheworris@users.noreply.github.com>
 Date: Tue, 17 Nov 2026 03:05:18 +0000
 Subject: [PATCH] ARM: dts: am335x-boneblack: enable UART4 on P9.11/P9.13
 
+Upstream-Status: Inappropriate [project-specific header pin configuration]
 ---
  .../arm/boot/dts/ti/omap/am335x-boneblack.dts | 24 +++++++++++++++++++
  1 file changed, 24 insertions(+)

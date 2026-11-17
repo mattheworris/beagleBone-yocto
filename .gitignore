@@ -2,11 +2,12 @@
 build/
 downloads/
 sstate-cache/
+adcs-testbed/
 
 # bitbake is cloned separately by each developer (see README)
 bitbake/
 
-# bitbake-setup init top directory (build environments live here)
+# bitbake-setup init top directory — ignore build artifacts, track conf
 bitbake-builds/
 
 # Editor and OS noise
@@ -14,6 +15,7 @@ bitbake-builds/
 *.swp
 *~
 .DS_Store
+.claude/
 
 # Prerequisites
 *.d
